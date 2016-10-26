@@ -11,59 +11,65 @@ Create a RP word game for all users who play it to be amazed at how awesome it i
 //Pre-processor stuff
 #include <iostream>
 #include <string>
+#include<Windows.h>
+#include<fstream>
+#include<ios>
+#include<iomanip>
 
 using namespace std;
 
 //Declaring the functions for use in main
 int youLose(int gold);
 int heroStats(int hp, int hero_hp, int gold);
-int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int gold_mod, int gold_drop, int race_choice);
-
-
-//Declare and initiate variables
-int hero_hp = 0,         //HERO HP
-	total_hero_hp = 0,   /////////
-	//-------------------
-	hero_dmg = 0,        //HERO DAMAGE
-	//-------------------
-	zombie_hp = 20,      //ENEMY HEALTH POINTS
-	bandit_hp = 75,      /////////////////////
-	minotaur_hp = 150,   /////////////////////
-	evil_wizard_hp = 200,/////////////////////
-	//-------------------
-	zombie_dmg = 5,      //ENEMY DAMAGE
-	bandit_dmg = 12,     //////////////
-	minotaur_dmg = 10,   //////////////
-	evil_wizard_dmg = 20,//////////////
-	//-------------------
-	gold = 0,            //GOLD STUFF
-	gold_mod = 0,        ////////////
-	gold_drop = 0,       ////////////
-	//-------------------
-	race_choice = 0,     //ASSORTED
-	hallway_choice = 0,  //////////
-	user_choice = 0,     //////////
-	user_try = 1,        //////////
-	user_final_choice = 0,/////////
-	user_input = 0,      //////////
-	play_again = 0;		 //////////
-	//Strings------------
-	string cont_break;   //STRING
+int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int gold_mod, int gold_drop, int race_choice, string cont_break, int bandit_hp, int bandit_dmg, int user_choice, int user_try, int user_input, int user_final_choice, int minotaur_hp, int minotaur_dmg, int evil_wizard_hp, int evil_wizard_dmg);
+void resetVariable(int &hero_hp, int &total_hero_hp, int &hero_dmg, int &zombie_hp, int &bandit_hp, int &minotaur_hp, int &evil_wizard_hp, int &zombie_dmg, int &bandit_dmg, int &minotaur_dmg, int &evil_wizard_dmg, int &gold, int &gold_mod, int &gold_drop, int &race_choice, int &hallway_choice, int &user_choice, int &user_try, int &user_final_choice, int &user_input, int &play_again);
+void credits();
+void Write_Score(int score);
+void Read_Score();
 
 
 //Define the main function
 int main()
 {
-	cout << "\t\t\tWELCOME TO TEAM 1's GAME!\n\n";
-	cout << "\t\t\t#########################";
-	cout << "\n\t\t\t#++ Quest for Midgard ++#";
-	cout << "\n\t\t\t#########################\n";
+		//Declare and initiate variables
+		int hero_hp = 0,         //HERO HP
+			total_hero_hp = 0,   /////////
+								 //-------------------
+			hero_dmg = 0,        //HERO DAMAGE
+								 //-------------------
+			zombie_hp = 20,      //ENEMY HEALTH POINTS
+			bandit_hp = 75,      /////////////////////
+			minotaur_hp = 150,   /////////////////////
+			evil_wizard_hp = 200,/////////////////////
+								 //-------------------
+			zombie_dmg = 5,      //ENEMY DAMAGE
+			bandit_dmg = 12,     //////////////
+			minotaur_dmg = 10,   //////////////
+			evil_wizard_dmg = 20,//////////////
+								 //-------------------
+			gold = 0,            //GOLD STUFF
+			gold_mod = 0,        ////////////
+			gold_drop = 0,       ////////////
+								 //-------------------
+			race_choice = 0,     //ASSORTED
+			hallway_choice = 0,  //////////
+			user_choice = 0,     //////////
+			user_try = 1,        //////////
+			user_final_choice = 0,/////////
+			user_input = 0,      //////////
+			play_again = 0;		 //////////
+								 //Strings------------
+		string cont_break;   //STRING
+		cout << "\t\t\tWELCOME TO TEAM 1's GAME!\n\n";
+		cout << "\t\t\t#########################";
+		cout << "\n\t\t\t#++ Quest for Midgard ++#";
+		cout << "\n\t\t\t#########################\n";
 
 	//While loop to handle the validation of user choice
 	do {
-
+		resetVariable(hero_hp,total_hero_hp,hero_dmg,zombie_hp,bandit_hp,minotaur_hp,evil_wizard_hp,zombie_dmg,bandit_dmg,minotaur_dmg,evil_wizard_dmg,gold,gold_mod,gold_drop,race_choice,hallway_choice,user_choice,user_try,user_final_choice,user_input,play_again);
 		//Display menu for user
-		cout << "\n1) Rules\n2) Play Game\n3) Exit\n";
+		cout << "\n1) Rules\n2) Play Game\n3) Highscores\n4) Exit\n";
 		cout << "Please choose from the list above: ";
 
 		//Get users input and set it to the choice variable
@@ -303,7 +309,7 @@ int main()
 							}
 
 							//Furthering story using a function so the program isn't copying to much
-							storyContinued(hero_hp, total_hero_hp, hero_dmg, gold, gold_mod, gold_drop, race_choice);
+							storyContinued(hero_hp, total_hero_hp, hero_dmg, gold, gold_mod, gold_drop, race_choice, cont_break, bandit_hp, bandit_dmg, user_choice, user_try, user_input, user_final_choice, minotaur_hp, minotaur_dmg, evil_wizard_hp, evil_wizard_dmg);
 
 						}
 
@@ -375,7 +381,7 @@ int main()
 
 							}
 							//Furthering story using a function so the program isn't copying to much
-							storyContinued(hero_hp, total_hero_hp, hero_dmg, gold, gold_mod, gold_drop, race_choice);
+							storyContinued(hero_hp, total_hero_hp, hero_dmg, gold, gold_mod, gold_drop, race_choice, cont_break, bandit_hp, bandit_dmg, user_choice, user_try, user_input, user_final_choice, minotaur_hp, minotaur_dmg, evil_wizard_hp, evil_wizard_dmg);
 
 						}
 						//STATS
@@ -402,9 +408,12 @@ int main()
 		}
 
 		//EXIT GAME
-		else if (user_choice == 3) {
+		else if (user_choice == 4) {
 			cout << "\nPress any key to exit!\n";
 			user_choice = 0;
+		}
+		else if (user_choice == 3) {
+			Read_Score();
 		}
 		else {
 			cout << "\nPlease choose from the menu above ...\n";
@@ -452,8 +461,7 @@ int heroStats(int hp, int hero_hp, int gold) {
 	return 0;
 }
 
-int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int gold_mod, int gold_drop, int race_choice) {
-
+int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int gold_mod, int gold_drop, int race_choice, string cont_break, int bandit_hp, int bandit_dmg, int user_choice, int user_try, int user_input, int user_final_choice, int minotaur_hp, int minotaur_dmg, int evil_wizard_hp, int evil_wizard_dmg) {
 	cout << "\nPress enter to continue ...";
 	getline(cin, cont_break);
 
@@ -787,6 +795,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 						cout << "\n#######################################"; //40 # signs
 						cout << "\n\tHP = " << hero_hp << "/" << total_hero_hp << "  Gold = " << gold << endl;
 						cout << "#######################################\n"; //30 # signs
+						Write_Score(gold);
 
 						gold_drop = 0;
 					}
@@ -801,7 +810,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 					if (user_final_choice == 1) {
 						//PATH CHOICE LEADS TO DARKNESS
 						if (race_choice == 1) {
-							cout << "\nWith the new immortality granted by Zana's foul magics,\nThorin began a crusade to free all the dwarves of Midgard.\nHe found anywhere they were enslaved to mines,\nkilling the captors and freeing his people.\nYet, even as more of his people became freed,"<<endl<<"he needed more metals to create his armies.\n He soon turned to enslaving his own people in order to fund\nhis crusade for freedom.\n";
+							cout << "\nWith the new immortality granted by Zana's foul magics,\nThorin began a crusade to free all the dwarves of Midgard.\nHe found anywhere they were enslaved to mines,\nkilling the captors and freeing his people.\nYet, even as more of his people became freed," << endl << "he needed more metals to create his armies.\n He soon turned to enslaving his own people in order to fund\nhis crusade for freedom.\n";
 						}
 						else if (race_choice == 2) {
 							cout << "\nWith immortality attained, it corrupted Leo to the core.\nLeo had merely switched out one tyrant for another,\nbecoming the new dark lord of Midgard. He raised humanity to a new pinnacle,\nwhere all races must bow to them for they were mere slaves to their dark lord.\nEventually, this treatment began killing off the other races,\nuntil only humans remained,killing each other over the scraps\nwhich were left behind in this ruined world.\n";
@@ -830,11 +839,221 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 					}
 
 				}
-				cout << "\n\nThe game is over\n\n\n";
+				credits();
 				user_choice = 0;
+
 			}
 
 		}//IF FOR PASSING THE EQUATION
 	}
+	//Declare and initiate variables
 	return 0;
+}
+
+void resetVariable(int &hero_hp, int &total_hero_hp, int &hero_dmg, int &zombie_hp, int &bandit_hp, int &minotaur_hp, int &evil_wizard_hp, int &zombie_dmg, int &bandit_dmg, int &minotaur_dmg, int &evil_wizard_dmg, int &gold, int &gold_mod, int &gold_drop, int &race_choice, int &hallway_choice, int &user_choice, int &user_try, int &user_final_choice, int &user_input, int &play_again)
+{
+	//Declare and initiate variables
+		hero_hp = 0,         //HERO HP
+		total_hero_hp = 0,   /////////
+							 //-------------------
+		hero_dmg = 0,        //HERO DAMAGE
+							 //-------------------
+		zombie_hp = 20,      //ENEMY HEALTH POINTS
+		bandit_hp = 75,      /////////////////////
+		minotaur_hp = 150,   /////////////////////
+		evil_wizard_hp = 200,/////////////////////
+							 //-------------------
+		zombie_dmg = 5,      //ENEMY DAMAGE
+		bandit_dmg = 12,     //////////////
+		minotaur_dmg = 10,   //////////////
+		evil_wizard_dmg = 20,//////////////
+							 //-------------------
+		gold = 0,            //GOLD STUFF
+		gold_mod = 0,        ////////////
+		gold_drop = 0,       ////////////
+							 //-------------------
+		race_choice = 0,     //ASSORTED
+		hallway_choice = 0,  //////////
+		user_choice = 0,     //////////
+		user_try = 1,        //////////
+		user_final_choice = 0,/////////
+		user_input = 0,      //////////
+		play_again = 0;		 //////////
+}
+
+void credits()
+{
+	Sleep(10000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << "\t\t\t#########################";
+	cout << "\n\t\t\t#++ Quest for Midgard ++#";
+	cout << "\n\t\t\t#########################\n";
+	Sleep(1000);
+	cout << "\t\t\t      C";
+	Sleep(150);
+	cout << "r";
+	Sleep(150);
+	cout << "e";
+	Sleep(150);
+	cout << "a";
+	Sleep(150);
+	cout << "t";
+	Sleep(150);
+	cout << "e";
+	Sleep(150);
+	cout << "d";
+	Sleep(150);
+	cout << " b";
+	Sleep(150);
+	cout << "y:\n";
+	Sleep(750);
+	cout << endl;
+	Sleep(750);
+	cout << "\t\t\t      D";
+	Sleep(150);
+	cout << "a";
+	Sleep(150);
+	cout << "l";
+	Sleep(150);
+	cout << "t";
+	Sleep(150);
+	cout << "o";
+	Sleep(150);
+	cout << "n";
+	Sleep(150);
+	cout << " M";
+	Sleep(150);
+	cout << "c";
+	Sleep(150);
+	cout << "C";
+	Sleep(150);
+	cout << "l";
+	Sleep(150);
+	cout << "a";
+	Sleep(150);
+	cout << "i";
+	Sleep(150);
+	cout << "n\n";
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << "\t\t\t      N";
+	Sleep(150);
+	cout << "i";
+	Sleep(150);
+	cout << "c";
+	Sleep(150);
+	cout << "a";
+	Sleep(150);
+	cout << "o";
+	Sleep(150);
+	cout << "r";
+	Sleep(150);
+	cout << " L";
+	Sleep(150);
+	cout << "a";
+	Sleep(150);
+	cout << "p";
+	Sleep(150);
+	cout << "a";
+	Sleep(150);
+	cout << "i";
+	Sleep(150);
+	cout << "x\n";
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << "\t\t\t      E";
+	Sleep(150);
+	cout << "l";
+	Sleep(150);
+	cout << "l";
+	Sleep(150);
+	cout << "i";
+	Sleep(150);
+	cout << "o";
+	Sleep(150);
+	cout << "t";
+	Sleep(150);
+	cout << " W";
+	Sleep(150);
+	cout << "o";
+	Sleep(150);
+	cout << "l";
+	Sleep(150);
+	cout << "f";
+	Sleep(150);
+	cout << "f\n\n";
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+	Sleep(1000);
+	cout << endl;
+}
+
+void Write_Score(int score)
+{
+	string usr_name;
+	do
+	{
+		cout << "Enter your name, hero: ";
+		cin >> usr_name;
+		if (size(usr_name) >= 7)
+		{
+			cout << "\nError, enter a username less than or equal to 6 characters in length.\n";
+		}
+		else
+		{
+			cout << "\nThank you.\n";
+		}
+	} while (size(usr_name) >= 7);
+	ofstream outfile;
+	outfile.open("Highscores.txt", ios::app);
+	outfile << usr_name << "\t\t\t" << score << endl;
+	outfile.close();
+}
+
+void Read_Score()
+{
+	int score = 0;
+	string name;
+	ifstream infile;
+	infile.open("Highscores.txt", ios::in);
+	cout << "Username\t\tScore\n";
+	cout << "-----------------------------\n";
+	while (infile >> name >> score)
+	{
+		cout << name << "\t" << setw(10) << score << endl;
+	}
+	infile.close();
 }
