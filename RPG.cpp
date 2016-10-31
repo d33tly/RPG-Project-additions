@@ -11,10 +11,10 @@ Create a RP word game for all users who play it to be amazed at how awesome it i
 //Pre-processor stuff
 #include <iostream>
 #include <string>
-#include<Windows.h>
-#include<fstream>
-#include<ios>
-#include<iomanip>
+#include <Windows.h>
+#include <fstream>
+#include <ios>
+#include <iomanip>
 
 using namespace std;
 
@@ -26,6 +26,7 @@ void resetVariable(int &hero_hp, int &total_hero_hp, int &hero_dmg, int &zombie_
 void credits();
 void Write_Score(int score);
 void Read_Score();
+int attack_value(int race_choice);
 
 
 //Define the main function
@@ -1053,7 +1054,17 @@ void Read_Score()
 	cout << "-----------------------------\n";
 	while (infile >> name >> score)
 	{
-		cout << name << "\t" << setw(10) << score << endl;
+		cout << name << "\t" <<"\t"<< setw(13) << score << endl;
 	}
 	infile.close();
+}
+
+int attack_value(int mod)
+{
+	int attack_rand = 0;
+	srand(time(NULL));
+
+	attack_rand = rand() % 15 + 1;
+	return attack_rand*mod;
+
 }
