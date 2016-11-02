@@ -15,7 +15,7 @@ Create a RP word game for all users who play it to be amazed at how awesome it i
 #include <fstream>
 #include <ios>
 #include <iomanip>
-
+#include <ctime>
 using namespace std;
 
 //Declaring the functions for use in main
@@ -27,7 +27,8 @@ void credits();
 void Write_Score(int score);
 void Read_Score();
 int attack_value(int race_choice);
-
+int mainMenu(int user_choice);
+void Rules();
 
 //Define the main function
 int main()
@@ -70,20 +71,10 @@ int main()
 	do {
 		resetVariable(hero_hp,total_hero_hp,hero_dmg,zombie_hp,bandit_hp,minotaur_hp,evil_wizard_hp,zombie_dmg,bandit_dmg,minotaur_dmg,evil_wizard_dmg,gold,gold_mod,gold_drop,race_choice,hallway_choice,user_choice,user_try,user_final_choice,user_input,play_again);
 		//Display menu for user
-		cout << "\n1) Rules\n2) Play Game\n3) Highscores\n4) Exit\n";
-		cout << "Please choose from the list above: ";
-
-		//Get users input and set it to the choice variable
-		cin >> user_choice;
-		cin.ignore();
+		user_choice = mainMenu(user_choice);
 
 		if (user_choice == 1) {
-			cout << "\nRules: ";
-			cout << "\n\t1) In order to make any choices, use only the menu options available.";
-			cout << "\n\t2) Your race chooses your difficulty, which will increase your gold.";
-			cout << "\n\t3) Whenever you pick up an item, your health will be replenished.";
-			cout << "\n\t4) You want to kill the wizard, don't run.";
-			cout << "\n\t5) Don't use letters, or the world will be destroyed.\n";
+		Rules();
 		}
 		else if (user_choice == 2) {
 			//Zana backstory
@@ -108,7 +99,6 @@ int main()
 					//Assign dwarf hero variables
 					total_hero_hp = 150;
 					hero_hp = 150;
-					hero_dmg = 15;
 					gold_mod = 1;
 
 					//Display users race choice and hero name
@@ -134,7 +124,6 @@ int main()
 					//Assign human hero variables
 					total_hero_hp = 100;
 					hero_hp = 100;
-					hero_dmg = 15;
 					gold_mod = 2;
 
 					//Display users race choice and hero name
@@ -157,7 +146,6 @@ int main()
 					//Assign wizard hero variables
 					total_hero_hp = 75;
 					hero_hp = 75;
-					hero_dmg = 30;
 					gold_mod = 3;
 
 					//Display users race choice and hero name
@@ -184,7 +172,6 @@ int main()
 					//Assign elf hero variables
 					total_hero_hp = 72;
 					hero_hp = 72;
-					hero_dmg = 15;
 					gold_mod = 4;
 
 					//Display users race choice and hero name
@@ -254,6 +241,7 @@ int main()
 								getline(cin, cont_break);
 
 								//HERO ATTACK
+								hero_dmg = attack_value(race_choice);
 								cout << "\nYOU ATTACKED IT! Dealing " << hero_dmg << " damage!\n";
 								zombie_hp -= hero_dmg;
 
@@ -327,6 +315,7 @@ int main()
 								getline(cin, cont_break);
 
 								//HERO ATTACK
+								hero_dmg = attack_value(race_choice);
 								cout << "\nYOU ATTACKED IT! Dealing " << hero_dmg << " damage!\n";
 								zombie_hp -= hero_dmg;
 
@@ -481,6 +470,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 		getline(cin, cont_break);
 
 		//HERO ATTACK
+		hero_dmg = attack_value(race_choice);
 		cout << "\nYOU ATTACKED IT! Dealing " << hero_dmg << " damage!\n";
 		bandit_hp -= hero_dmg;
 
@@ -621,6 +611,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 				getline(cin, cont_break);
 
 				//HERO ATTACK
+				hero_dmg = attack_value(race_choice);
 				cout << "\nYOU ATTACKED IT! Dealing " << hero_dmg << " damage!\n";
 				minotaur_hp -= hero_dmg;
 
@@ -676,21 +667,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 					cout << "\nIt reads... \'The wearer of this gem will be granted great strength\'";
 					cout << "\nYou put the chain around your neck and immediately feel different!";
 					cout << "\nYou feel as though your strength has doubled, like that of a minotaur's!";//Elliot: Changed some wording
-					cout << "\n\nYour damage has increased!";
-					cout << "\nYour damage was at " << hero_dmg << ".";
-					if (race_choice == 1) {
-						hero_dmg *= 2;
-					}
-					else if (race_choice == 2) {
-						hero_dmg *= 3;
-					}
-					else if (race_choice == 3) {
-						hero_dmg *= 2;
-					}
-					else if (race_choice == 4) {
-						hero_dmg *= 4;
-					}
-					cout << "\nYour damage is now at " << hero_dmg << "!";
+					cout << "\n\nYour damage has doubled!";
 					hero_hp = total_hero_hp;
 					cout << "\nYou HP is full! " << hero_hp << "/" << total_hero_hp;
 
@@ -724,6 +701,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 					getline(cin, cont_break);
 
 					//HERO ATTACK
+					hero_dmg = attack_value(race_choice)*2;
 					cout << "\nYOU ATTACKED IT! Dealing " << hero_dmg << " damage!\n";
 					evil_wizard_hp -= hero_dmg;
 
@@ -796,7 +774,6 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 						cout << "\n#######################################"; //40 # signs
 						cout << "\n\tHP = " << hero_hp << "/" << total_hero_hp << "  Gold = " << gold << endl;
 						cout << "#######################################\n"; //30 # signs
-						Write_Score(gold);
 
 						gold_drop = 0;
 					}
@@ -840,6 +817,7 @@ int storyContinued(int hero_hp, int total_hero_hp, int hero_dmg, int gold, int g
 					}
 
 				}
+				Write_Score(gold);
 				credits();
 				user_choice = 0;
 
@@ -1029,15 +1007,11 @@ void Write_Score(int score)
 	{
 		cout << "Enter your name, hero: ";
 		cin >> usr_name;
-		if (size(usr_name) >= 7)
+		if (size(usr_name) != 3)
 		{
-			cout << "\nError, enter a username less than or equal to 6 characters in length.\n";
+			cout << "\nError, enter a username of 3 characters.\n";
 		}
-		else
-		{
-			cout << "\nThank you.\n";
-		}
-	} while (size(usr_name) >= 7);
+	} while (size(usr_name) != 3);
 	ofstream outfile;
 	outfile.open("Highscores.txt", ios::app);
 	outfile << usr_name << "\t\t\t" << score << endl;
@@ -1064,7 +1038,32 @@ int attack_value(int mod)
 	int attack_rand = 0;
 	srand(time(NULL));
 
-	attack_rand = rand() % 15 + 1;
+	attack_rand = rand() % 15 + 2;
 	return attack_rand*mod;
 
+}
+
+int mainMenu(int user_choice)
+{
+	do {
+		cout << "\n1) Rules\n2) Play Game\n3) Highscores\n4) Exit\n";
+		cout << "Please choose from the list above: ";
+		cin >> user_choice;
+		cin.ignore();
+		if (user_choice > 4 || user_choice < 1)
+		{
+			cout << "ERROR: You must select from the given menu.";
+		}
+	} while (user_choice > 4 || user_choice < 1);
+	return user_choice;
+}
+
+void Rules()
+{
+	cout << "\nRules: ";
+	cout << "\n\t1) In order to make any choices, use only the menu options available.";
+	cout << "\n\t2) Your race chooses your difficulty, which will increase your gold.";
+	cout << "\n\t3) Whenever you pick up an item, your health will be replenished.";
+	cout << "\n\t4) You want to kill the wizard, don't run.";
+	cout << "\n\t5) Don't use letters, or the world will be destroyed.\n";
 }

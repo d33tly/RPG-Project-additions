@@ -1,3 +1,4 @@
 ﻿  RPG.cpp
-  RPG Project V2.0.vcxproj -> C:\Users\Lala-PC\RPG-Project-Additions\RPG-Project-V2.0\Debug\RPG Project V2.0.exe
-  RPG Project V2.0.vcxproj -> C:\Users\Lala-PC\RPG-Project-Additions\RPG-Project-V2.0\Debug\RPG Project V2.0.pdb (Full PDB)
+c:\users\lala-pc\rpg-project-additions\rpg.cpp(1039): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  RPG Project V2.0.vcxproj -> C:\Users\Lala-PC\RPG-Project-additions\RPG-Project-V2.0\Debug\RPG Project V2.0.exe
+  RPG Project V2.0.vcxproj -> C:\Users\Lala-PC\RPG-Project-additions\RPG-Project-V2.0\Debug\RPG Project V2.0.pdb (Full PDB)
