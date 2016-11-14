@@ -29,6 +29,7 @@ void Read_Score();
 int attack_value(int race_choice);
 int mainMenu(int user_choice);
 void Rules();
+void compare_score(string uname, int score);
 
 //Define the main function
 int main()
@@ -1012,10 +1013,7 @@ void Write_Score(int score)
 			cout << "\nError, enter a username of 3 characters.\n";
 		}
 	} while (size(usr_name) != 3);
-	ofstream outfile;
-	outfile.open("Highscores.txt", ios::app);
-	outfile << usr_name << "\t\t\t" << score << endl;
-	outfile.close();
+	compare_score(usr_name, score);
 }
 
 void Read_Score()
@@ -1038,7 +1036,7 @@ int attack_value(int mod)
 	int attack_rand = 0;
 	srand(time(NULL));
 
-	attack_rand = rand() % 15 + 2;
+	attack_rand = rand() % 18 + 2;
 	return attack_rand*mod;
 
 }
@@ -1066,4 +1064,45 @@ void Rules()
 	cout << "\n\t3) Whenever you pick up an item, your health will be replenished.";
 	cout << "\n\t4) You want to kill the wizard, don't run.";
 	cout << "\n\t5) Don't use letters, or the world will be destroyed.\n";
+}
+
+void compare_score(string uname, int score)
+{
+	int uscore[3] = { 0 };
+	string usname[3];
+	ifstream infile;
+	infile.open("Highscores.txt", ios::in);
+	for (int j = 0; j < 3; j++)
+	{
+		infile >> usname[j] >> uscore[j];
+	}
+	if (score > uscore[0])
+	{
+		uscore[2] = uscore[1];
+		usname[2] = usname[1];
+		uscore[1] = uscore[0];
+		usname[1] = usname[0];
+		uscore[0] = score;
+		usname[0] = uname;
+	}
+	else if (score > uscore[1])
+	{
+		uscore[2] = uscore[1];
+		usname[2] = usname[1];
+		uscore[1] = score;
+		usname[1] = uname;
+	}
+	else if (score > uscore[2])
+	{
+		uscore[2] = score;
+		usname[2] = uname;
+	}
+	infile.close();
+	ofstream outfile;
+	outfile.open("Highscores.txt", ios::out);
+	for (int q = 0; q < 3; q++)
+	{
+		outfile << usname[q] <<"\t" << uscore[q] << endl;
+	}
+	outfile.close();
 }
